@@ -1,0 +1,74 @@
+Sub VBAOfWallStreet()
+
+Dim ticker As String
+Dim yearlychange As Double
+Dim percentchange As Double
+Dim volume As Double
+Dim LastRow As Double
+Dim SummaryTableRow As Double
+Dim RowCount As Double
+
+yearlychange = 0
+percentchange = 0
+volume = 0
+LastRow = Cells(Rows.Count, 1).End(xlUp).Row
+SummaryTableRow = 2
+RowCount = 0
+
+Range("I1").Value = "Ticker"
+Range("J1").Value = "YearlyChange"
+Range("K1").Value = "PercentChange"
+Range("L1").Value = "TotalStockVolume"
+
+For i = 2 To LastRow
+
+    If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+    
+        ticker = Cells(i, 1).Value
+    
+        yearlychange = (Cells(i, 6).Value - Cells(i - RowCount, 3).Value)
+        
+        percentchange = (Cells(i, 6).Value / Cells(i - RowCount, 3).Value) - 1
+    
+        volume = volume + Cells(i, 7).Value
+        
+        Range("I" & SummaryTableRow).Value = ticker
+    
+        Range("J" & SummaryTableRow).Value = yearlychange
+        
+            If yearlychange > 0 Then
+            
+            Range("J" & SummaryTableRow).Interior.ColorIndex = 4
+            
+            Else: Range("J" & SummaryTableRow).Interior.ColorIndex = 3
+            
+            End If
+    
+        Range("K" & SummaryTableRow).Value = percentchange
+        
+            Range("K" & SummaryTableRow).NumberFormat = "0.00%"
+    
+        Range("L" & SummaryTableRow).Value = volume
+        
+        SummaryTableRow = SummaryTableRow + 1
+    
+        yearlychange = 0
+    
+        percentchange = 0
+    
+        volume = 0
+        
+        RowCount = 0
+    
+    Else
+    
+         volume = volume + Cells(i, 7).Value
+         
+         RowCount = RowCount + 1
+    
+    End If
+    
+Next i
+    
+End Sub
+
